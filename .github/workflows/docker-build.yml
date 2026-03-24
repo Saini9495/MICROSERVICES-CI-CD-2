@@ -1,0 +1,28 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build User Service
+      run: docker build ./user-service -t user-service
+
+    - name: Build Product Service
+      run: docker build ./product-service -t product-service
+
+    - name: Build Gateway
+      run: docker build ./gateway -t gateway
