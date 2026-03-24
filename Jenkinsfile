@@ -1,7 +1,18 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'docker:24.0.5'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     stages {
+
+        stage('Check Docker') {
+            steps {
+                sh 'docker --version'
+            }
+        }
 
         stage('Build Images') {
             steps {
@@ -13,7 +24,7 @@ pipeline {
 
         stage('Run Containers') {
             steps {
-                sh 'docker-compose down'
+                sh 'docker-compose down || true'
                 sh 'docker-compose up -d'
             }
         }
